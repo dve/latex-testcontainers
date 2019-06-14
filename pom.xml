@@ -29,9 +29,9 @@
 		</developer>
 	</developers>
 	<scm>
-		<connection>scm:git:https://github.com/dve/rapidpm-dependencies.git/latex-testcontainers</connection>
-		<developerConnection>scm:git:https://github.com/RapidPM/rapidpm-dependencies.git/latex-testcontainers</developerConnection>
-		<url>https://github.com/RapidPM/rapidpm-dependencies/latex-testcontainers</url>
+		<connection>scm:git:https://github.com/dve/latex-testcontainers.git</connection>
+		<developerConnection>scm:git:https://github.com/dve/latex-testcontainers.git</developerConnection>
+		<url>https://github.com/dve/latex-testcontainers</url>
 	</scm>
 
 	<name>Latex - Testcontainers :: Parent</name>
