@@ -15,12 +15,15 @@
 package net.vergien.ltc.demo;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.CompletableFuture;
 import org.rapidpm.dependencies.core.logger.HasLogger;
 import org.vaadin.alejandro.PdfBrowserViewer;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
@@ -51,32 +54,49 @@ public class VaadinApp extends Composite<Div> implements HasLogger {
     getContent().add(layout);
   }
 
+
   public void onCreatePDF(ClickEvent<Button> event) {
     Address address = new Address();
 
     if (binder.writeBeanIfValid(address)) {
       Notification.show("Create pdf for " + address.getFirstName() + ", " + address.getLastName());
-      try {
-        Path workDir = Files.createTempDirectory("pdfCration");
-        String fileName = "helloWorld.tex";
-        String latexSource = "\\documentclass[12pt]{article}\n" + "\\begin{document}\n" + "Hello "
-            + address.toString() + "!\n" + "$Hello world!$ %math mode \n" + "\\end{document}";
-        Path latexSourcePath = workDir.resolve(fileName);
-        Files.write(latexSourcePath, latexSource.getBytes());
-        try (LatexTestContainer ltc = new LatexTestContainer(workDir, fileName)) {
-          Notification.show(ltc.buildPDF().get().toString());
-          Path output = workDir.resolve("helloWorld.pdf");
-          if (Files.exists(output)) {
-            FileInputStream fileInputStream = new FileInputStream(output.toFile());
-            StreamResource sr = new StreamResource("helloWorld.pdf", () -> fileInputStream);
-
-            PdfBrowserViewer pdfBrowserViewer = new PdfBrowserViewer(sr);
-            layout.add(pdfBrowserViewer);
+      final UI ui = UI.getCurrent();
+      CompletableFuture.runAsync(() -> {
+        try {
+          Path workDir = Files.createTempDirectory("pdfCration");
+          logger().info("Workdir: {}", workDir);
+          String fileName = "helloWorld.tex";
+          String latexSource = "\\documentclass[12pt]{article}\n" + "\\begin{document}\n" + "Hello "
+              + address.toString() + "!\n" + "$Hello world!$ %math mode \n" + "\\end{document}";
+          Path latexSourcePath = workDir.resolve(fileName);
+          Files.write(latexSourcePath, latexSource.getBytes());
+          try (LatexTestContainer ltc = new LatexTestContainer(workDir)) {
+            ltc.pdflatex(fileName);
+            Path output = workDir.resolve("helloWorld.pdf");
+            logger().info("output {}", output);
+            if (Files.exists(output)) {
+              ui.access(() -> {
+                showPDF(output);
+              });
+            }
           }
+        } catch (Exception e) {
+          logger().severe("Failure creating pdf", e);
         }
-      } catch (Exception e) {
-      }
+      });
+    }
+  }
 
+
+  private void showPDF(Path output) {
+    try {
+      @SuppressWarnings("resource") // stream is closed within vaadin framework
+      FileInputStream fileInputStream = new FileInputStream(output.toFile());
+      PdfBrowserViewer pdfBrowserViewer =
+          new PdfBrowserViewer(new StreamResource("helloWorld.pdf", () -> fileInputStream));
+      layout.add(pdfBrowserViewer);
+    } catch (FileNotFoundException e) {
+      logger().severe("Failure showing pdf", e);
     }
   }
 }

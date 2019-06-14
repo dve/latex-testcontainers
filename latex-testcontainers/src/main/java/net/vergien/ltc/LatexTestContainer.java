@@ -1,40 +1,23 @@
 package net.vergien.ltc;
 
 import java.nio.file.Path;
-import java.util.concurrent.CompletableFuture;
-import org.testcontainers.containers.GenericContainer;
+import java.time.Duration;
 
-public class LatexTestContainer extends GenericContainer<LatexTestContainer> {
-  private final String fileName;
-  private final Path workDir;
-  private int pollIntervall = 50;
+public class LatexTestContainer extends AbstractLatexContainer<LatexTestContainer> {
 
-  public LatexTestContainer(Path workDir, String fileName) {
-    this.fileName = fileName;
-    this.workDir = workDir;
-    setDockerImageName("blang/latex:ctanbasic");
-    withFileSystemBind(workDir.toAbsolutePath().toString(), "/data");
-    withCommand("pdflatex " + fileName);
+  public LatexTestContainer(Path workDir) {
+    super(workDir);
   }
 
-  public CompletableFuture<Path> buildPDF() {
-
-    return CompletableFuture.supplyAsync(() -> {
-      try {
-        start();
-        while (isRunning()) {
-          try {
-            Thread.sleep(pollIntervall);
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
-        }
-      } catch (Exception e) {
-        logger().warn("Failure running latex", e);
-      }
-      return workDir;
-    });
-
+  public LatexTestContainer withTimeout(Duration timeout) {
+    // Only "startup" command is running
+    return super.withStartupTimeout(timeout);
+  }
+@Override
+  public Path pdflatex(String fileName) {
+    withCommand("pdflatex " + fileName);
+    start();
+    return workDir;
   }
 
 }

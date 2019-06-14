@@ -5,7 +5,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.Test;
 import org.rapidpm.dependencies.core.logger.HasLogger;
@@ -18,10 +17,8 @@ class TestLatexTestContainer implements HasLogger {
     logger().info("Workdir: {}", workDir);
     Files.copy(getClass().getResourceAsStream("/helloworld.tex"),
         workDir.resolve("helloworld.tex"));
-    LatexTestContainer ltcUT = new LatexTestContainer(workDir, "helloworld.tex");
-    CompletableFuture<Path> result = ltcUT.buildPDF();
-
-    Path resultDir = result.get();
+    LatexTestContainer ltcUT = new LatexTestContainer(workDir);
+    Path resultDir = ltcUT.pdflatex("helloworld.tex");
     assertThat(Files.exists(resultDir.resolve("helloworld.pdf")), is(true));
   }
 
@@ -31,10 +28,9 @@ class TestLatexTestContainer implements HasLogger {
     logger().info("Workdir: {}", workDir);
     Files.copy(getClass().getResourceAsStream("/helloworld_witherrors.tex"),
         workDir.resolve("helloworld.tex"));
-    LatexTestContainer ltcUT = new LatexTestContainer(workDir, "helloworld.tex");
-    CompletableFuture<Path> result = ltcUT.buildPDF();
+    LatexTestContainer ltcUT = new LatexTestContainer(workDir);
 
-    Path resultDir = result.get();
+    Path resultDir = ltcUT.pdflatex("helloworld.tex");
     assertThat(Files.exists(resultDir.resolve("helloworld.pdf")), is(false));
   }
 }
