@@ -3,13 +3,13 @@ package net.vergien.ltc;
 import java.nio.file.Path;
 import java.time.Duration;
 
-public class LatexTestContainer extends AbstractLatexContainer<LatexTestContainer> {
+public class LatexContainer extends AbstractLatexContainer<LatexContainer> {
 
-  public LatexTestContainer(Path workDir) {
+  public LatexContainer(Path workDir) {
     super(workDir);
   }
 
-  public LatexTestContainer withTimeout(Duration timeout) {
+  public LatexContainer withTimeout(Duration timeout) {
     // Only "startup" command is running
     return super.withStartupTimeout(timeout);
   }

@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.Test;
 import org.rapidpm.dependencies.core.logger.HasLogger;
 
-class TestLatexTestContainer implements HasLogger {
+class TestLatexContainer implements HasLogger {
 
   @Test
   void test() throws IOException, InterruptedException, ExecutionException {
@@ -17,7 +17,7 @@ class TestLatexTestContainer implements HasLogger {
     logger().info("Workdir: {}", workDir);
     Files.copy(getClass().getResourceAsStream("/helloworld.tex"),
         workDir.resolve("helloworld.tex"));
-    LatexTestContainer ltcUT = new LatexTestContainer(workDir);
+    LatexContainer ltcUT = new LatexContainer(workDir);
     Path resultDir = ltcUT.pdflatex("helloworld.tex");
     assertThat(Files.exists(resultDir.resolve("helloworld.pdf")), is(true));
   }
@@ -28,7 +28,7 @@ class TestLatexTestContainer implements HasLogger {
     logger().info("Workdir: {}", workDir);
     Files.copy(getClass().getResourceAsStream("/helloworld_witherrors.tex"),
         workDir.resolve("helloworld.tex"));
-    LatexTestContainer ltcUT = new LatexTestContainer(workDir);
+    LatexContainer ltcUT = new LatexContainer(workDir);
 
     Path resultDir = ltcUT.pdflatex("helloworld.tex");
     assertThat(Files.exists(resultDir.resolve("helloworld.pdf")), is(false));

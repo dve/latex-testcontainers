@@ -34,7 +34,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
-import net.vergien.ltc.LatexTestContainer;
+import net.vergien.ltc.LatexContainer;
 
 
 @Route("")
@@ -70,7 +70,7 @@ public class VaadinApp extends Composite<Div> implements HasLogger {
               + address.toString() + "!\n" + "$Hello world!$ %math mode \n" + "\\end{document}";
           Path latexSourcePath = workDir.resolve(fileName);
           Files.write(latexSourcePath, latexSource.getBytes());
-          try (LatexTestContainer ltc = new LatexTestContainer(workDir)) {
+          try (LatexContainer ltc = new LatexContainer(workDir)) {
             ltc.pdflatex(fileName);
             Path output = workDir.resolve("helloWorld.pdf");
             logger().info("output {}", output);
