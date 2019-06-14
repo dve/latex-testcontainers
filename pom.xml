@@ -1,0 +1,77 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.vergien.ltc</groupId>
+	<artifactId>latex-testcontainers-parent</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<description>Build latex with testcontainers</description>
+	<url>https://github.com/dve/latex-testcontainers</url>
+	<inceptionYear>2018</inceptionYear>
+	<parent>
+		<groupId>org.rapidpm</groupId>
+		<artifactId>rapidpm-dependencies</artifactId>
+		<version>04.00.17-RPM</version>
+	</parent>
+	<packaging>pom</packaging>
+	<organization>
+		<name>Daniel Nordhoff-Vergien</name>
+		<url>https://github.com/dve/</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<name>Daniel Nordhoff-Vergien</name>
+			<email>dve@vergien.net</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+	</developers>
+	<scm>
+		<connection>scm:git:https://github.com/dve/rapidpm-dependencies.git/latex-testcontainers</connection>
+		<developerConnection>scm:git:https://github.com/RapidPM/rapidpm-dependencies.git/latex-testcontainers</developerConnection>
+		<url>https://github.com/RapidPM/rapidpm-dependencies/latex-testcontainers</url>
+	</scm>
+
+	<name>Latex - Testcontainers :: Parent</name>
+
+	<modules>
+		<module>latex-testcontainers</module>
+		<module>demos</module>
+	</modules>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.jetbrains.kotlin</groupId>
+										<artifactId>kotlin-maven-plugin</artifactId>
+										<versionRange>[1.3.31,)</versionRange>
+										<goals>
+											<goal>test-compile</goal>
+											<goal>compile</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>
