@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>latex-testcontainer-demo</artifactId>
 	<properties>
-		<jetty.version>9.4.18.v20190429</jetty.version>
+		<jetty.version>9.4.35.v20201120</jetty.version>
 		<vaadin.version>14.0.0.beta2</vaadin.version>
 	</properties>
 	<dependencyManagement>
